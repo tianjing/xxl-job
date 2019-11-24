@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class XxlJobRemotingUtil {
     private static Logger logger = LoggerFactory.getLogger(XxlJobRemotingUtil.class);
-    public static String XXL_RPC_ACCESS_TOKEN = "XXL_RPC_ACCESS_TOKEN";
+    public static String XXL_RPC_ACCESS_TOKEN = "XXL-RPC-ACCESS-TOKEN";
 
     /**
      * post
@@ -98,8 +98,8 @@ public class XxlJobRemotingUtil {
                 }
                 return returnT;
             } catch (Exception e) {
-                e.printStackTrace();
-                return new ReturnT<String>(ReturnT.FAIL_CODE, "xxl-rpc remoting response content invalid("+ resultJson +"), for url : " + url);
+                logger.error("xxl-rpc remoting (url="+url+") response content invalid("+ resultJson +").", e);
+                return new ReturnT<String>(ReturnT.FAIL_CODE, "xxl-rpc remoting (url="+url+") response content invalid("+ resultJson +").");
             }
 
         } catch (Exception e) {

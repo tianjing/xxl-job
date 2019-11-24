@@ -1,10 +1,7 @@
 package com.xxl.job.admin.core.conf;
 
 import com.xxl.job.admin.core.scheduler.XxlJobScheduler;
-import com.xxl.job.admin.dao.XxlJobGroupDao;
-import com.xxl.job.admin.dao.XxlJobInfoDao;
-import com.xxl.job.admin.dao.XxlJobLogDao;
-import com.xxl.job.admin.dao.XxlJobRegistryDao;
+import com.xxl.job.admin.dao.*;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -65,6 +62,9 @@ public class XxlJobAdminConfig implements InitializingBean, DisposableBean {
     @Value("${xxl.job.triggerpool.slow.max}")
     private int triggerPoolSlowMax;
 
+    @Value("${xxl.job.logretentiondays}")
+    private int logretentiondays;
+
     // dao, service
 
     @Resource
@@ -75,6 +75,8 @@ public class XxlJobAdminConfig implements InitializingBean, DisposableBean {
     private XxlJobRegistryDao xxlJobRegistryDao;
     @Resource
     private XxlJobGroupDao xxlJobGroupDao;
+    @Resource
+    private XxlJobLogReportDao xxlJobLogReportDao;
     @Resource
     private JavaMailSender mailSender;
     @Resource
@@ -107,6 +109,13 @@ public class XxlJobAdminConfig implements InitializingBean, DisposableBean {
         return triggerPoolSlowMax;
     }
 
+    public int getLogretentiondays() {
+        if (logretentiondays < 7) {
+            return -1;  // Limit greater than or equal to 7, otherwise close
+        }
+        return logretentiondays;
+    }
+
     public XxlJobLogDao getXxlJobLogDao() {
         return xxlJobLogDao;
     }
@@ -121,6 +130,10 @@ public class XxlJobAdminConfig implements InitializingBean, DisposableBean {
 
     public XxlJobGroupDao getXxlJobGroupDao() {
         return xxlJobGroupDao;
+    }
+
+    public XxlJobLogReportDao getXxlJobLogReportDao() {
+        return xxlJobLogReportDao;
     }
 
     public JavaMailSender getMailSender() {
