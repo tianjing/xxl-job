@@ -23,7 +23,7 @@
 		t.update_time
 	</sql>
 	
-	<insert id="save" parameterType="com.xxl.job.admin.core.model.XxlJobLogGlue"  >
+	<insert id="save" parameterType="com.xxl.job.admin.core.model.XxlJobLogGlue" useGeneratedKeys="true" keyProperty="id" >
 		<selectKey resultType="int" order="BEFORE" keyProperty="id">
 			select SEQ_JOBLOGGLUE.nextval from dual
 		</selectKey>
@@ -41,14 +41,17 @@
 			#{glueType},
 			#{glueSource},
 			#{glueRemark},
-			current_timestamp,
-			current_timestamp
-		)
+			#{addTime},
+			#{updateTime}
+		);
+		<!--<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID() 
+		</selectKey>-->
 	</insert>
 	
 	<select id="findByJobId" parameterType="java.lang.Integer" resultMap="XxlJobLogGlue">
 		SELECT <include refid="Base_Column_List" />
-		FROM xxl_job_logglue t
+		FROM xxl_job_logglue AS t
 		WHERE t.job_id = #{jobId}
 		ORDER BY id DESC
 	</select>
@@ -56,12 +59,12 @@
 	<delete id="removeOld" >
 		DELETE FROM xxl_job_logglue
 		WHERE id NOT in(
-			SELECT id  FROM( SELECT id ,rownum rn FROM(
+			SELECT id FROM(
 				SELECT id FROM xxl_job_logglue
 				WHERE job_id = #{jobId}
-				ORDER BY update_time desc )
-
-			) t1 where rn  <![CDATA[ <= ]]>  #{limit}
+				ORDER BY update_time desc
+				LIMIT 0, #{limit}
+			) t1
 		) AND job_id = #{jobId}
 	</delete>
 	

@@ -1,6 +1,5 @@
 package com.xxl.job.admin;
 
-import com.xxl.job.admin.core.thread.JobFailMonitorHelper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -10,9 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class DmXxlJobAdminApplication {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
         SpringApplication.run(DmXxlJobAdminApplication.class, args);
-		JobFailMonitorHelper.getInstance().toStop();
-	}
+    }
 
 }
